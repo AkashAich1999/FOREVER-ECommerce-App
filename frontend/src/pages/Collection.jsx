@@ -5,7 +5,7 @@ import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
 
 const Collection = () => {
-  const { products } = useContext(ShopContext);
+  const { products, search, showSearch } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
@@ -80,36 +80,42 @@ const Collection = () => {
   //   sortProduct();
   // }, [sortType]);
 
-  const applyFilterAndSort = () => {
+  const applySearchFilterAndSort = () => {
     let productsCopy = products.slice();
 
-    // Step 1: Apply category Filter
+    // Step 1: SEARCH filter
+    if (showSearch && search) {
+      productsCopy = productsCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
+    }
+
+    // Step 2: Apply CATEGORY filter
     if (category.length > 0) {
       productsCopy = productsCopy.filter((item) =>
         category.includes(item.category)
       );
     }
 
-    // Step 2: Apply subCategory Filter
+    // Step 3: Apply SUBCATEGORY filter
     if (subCategory.length > 0) {
       productsCopy = productsCopy.filter((item) =>
         subCategory.includes(item.subCategory)
       );
     }
 
-    // Step 3: Apply Sorting after Filtering
+    // Step 4: Apply SORTING (always LAST)
     if (sortType === "low-high") {
       productsCopy.sort((a, b) => a.price - b.price);
     } else if (sortType === "high-low") {
       productsCopy.sort((a, b) => b.price - a.price);
     }
 
+    // FINAL RESULT
     setFilterProducts(productsCopy);
   };
 
   useEffect(() => {
-    applyFilterAndSort();
-  }, [category, subCategory, sortType]);
+    applySearchFilterAndSort();
+  }, [category, subCategory, sortType, search, showSearch]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
@@ -117,22 +123,18 @@ const Collection = () => {
       <div className="min-w-60">
         <p
           onClick={() => setShowFilter(!showFilter)}
-          className="my-2 text-xl flex items-center gap-2 cursor-pointer"
-        >
+          className="my-2 text-xl flex items-center gap-2 cursor-pointer">
           FILTERS
           <img
-            src={assets.dropdown_icon}
-            alt=""
-            className={`h-3 sm:hidden ${showFilter ? "rotate-90" : ""}`}
-          />
+            src={assets.dropdown_icon} alt=""
+            className={`h-3 sm:hidden ${showFilter ? "rotate-90" : ""}`}/>
         </p>
 
         {/* Category Filter */}
         <div
           className={`border border-gray-300 py-3 pl-3 mt-6 ${
             showFilter ? "" : "hidden"
-          } sm:block`}
-        >
+          } sm:block`}>
           <p className="text-sm font-medium mb-3">CATEGORIES</p>
 
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
