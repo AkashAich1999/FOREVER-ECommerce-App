@@ -63,10 +63,10 @@ const Navbar = () => {
                     <p>Back</p>
                 </div>
 
-                <NavLink className='border py-2 pl-6' to={'/'}>HOME</NavLink>
-                <NavLink className='border py-2 pl-6' to={'/collection'}>COLLECTION</NavLink>
-                <NavLink className='border py-2 pl-6' to={'/about'}>ABOUT</NavLink>
-                <NavLink className='border py-2 pl-6' to={'/contact'}>CONTACT</NavLink>
+                <NavLink onClick={ () => setVisible(false) } className='border py-2 pl-6' to={'/'}>HOME</NavLink>
+                <NavLink onClick={ () => setVisible(false) } className='border py-2 pl-6' to={'/collection'}>COLLECTION</NavLink>
+                <NavLink onClick={ () => setVisible(false) } className='border py-2 pl-6' to={'/about'}>ABOUT</NavLink>
+                <NavLink onClick={ () => setVisible(false) } className='border py-2 pl-6' to={'/contact'}>CONTACT</NavLink>
             </div>
         </div>
     </div>
