@@ -219,3 +219,27 @@ export const adminLogin = async (req, res) => {
     3. Always use HTTPS
     4. Use strong JWT_SECRET
 */
+
+/*
+    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6... 
+
+    This is an HTTP request header.
+
+    1. Authorization (Header Name) :
+       • Authorization is a standard HTTP header.
+       • It tells the server :
+            “I am sending my authentication credentials with this request.”
+
+    2. Bearer (Auth Scheme) :
+       Bearer means:
+            Whoever bears (possesses) this token is allowed access.
+       • No username
+       • No password
+       • Just the token
+       
+       • If you have the token → you are trusted.
+        
+       That’s why:
+       • Tokens must be stored securely
+       • HTTPS is mandatory        
+*/
