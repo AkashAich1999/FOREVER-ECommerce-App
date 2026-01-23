@@ -122,7 +122,33 @@ export const loginUser = async (req, res) => {
 
 // Admin Login Controller.
 export const adminLogin = async (req, res) => {
-    
+    try {
+        const { email, password } = req.body;
+
+        // 1. Validate Input.
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: "Email and Password are Required", });
+        }
+
+        // 2. Check Credentials.
+        if (email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({ success: false, message: "Invalid Credentials", });
+        }
+
+        // 3. Generate JWT. (SAFE payload)
+        const token = jwt.sign(
+            { email, role: "admin" },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+        
+        // 4. Success Response.
+        res.status(200).json({ success: true, token, });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server Error", });
+    }
 }
 
 
