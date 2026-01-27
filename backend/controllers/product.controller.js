@@ -153,6 +153,49 @@ export const singleProduct = async (req, res) => {
     }
 }
 
+/*
+    Q. Why in the Following, we are Checking for 
+       price == null   and not   !price ?
+    => We use:      price == null
+       Instead of:  !price
+
+       Because  !price  wrongly rejects valid values like 0.
+       
+       if (!price)
+       This checks whether price is falsy.
+
+       Falsy values in JavaScript :
+       • false
+       • 0
+       • ""
+       • null
+       • undefined
+       • NaN
+
+       Problem: 0 is a valid price, but !price treats it as Invalid.
+*/
+
+/*
+    Actual Structure of req.files :
+
+    req.files = {
+      image1: [
+        {
+          fieldname: "image1",
+          originalname: "shirt.png",
+          path: "uploads/abc123.png",
+          mimetype: "image/png",
+          size: 24563
+        }
+      ],
+      image2: [
+        {
+          fieldname: "image2",
+          path: "uploads/def456.png"
+        }
+      ]
+    }
+*/
 
 /*
     1. First Version (WITHOUT Optional Chaining) :
@@ -192,6 +235,75 @@ export const singleProduct = async (req, res) => {
        4. Else → return undefined
        5. Access [0] safely
        6. ✔ No crash
+*/
+
+/*
+    let imagesUrl = await Promise.all(
+        images.map(async (item) => {
+            let result = await cloudinary.uploader.upload(item.path, { resource_type:'image' });
+            return result.secure_url;
+        })
+    )
+
+    Uploads Multiple Images to Cloudinary CONCURRENTLY and returns Array of Secure URLs!
+    
+    Line-by-Line Breakdown :
+
+    1. let imagesUrl = await Promise.all(
+    • Wait for ALL Uploads to Finish. (Parallel, Not Sequential)
+
+    2.     images.map(async (item) => { 
+    • Loop through Images Array. (from req.files ---> Multer)
+
+    3.         let result = await cloudinary.uploader.upload(item.path, { resource_type:'image' });
+    • Upload EACH image to Cloudinary → returns upload result.
+
+    4.         return result.secure_url;
+    • Return ONLY the secure HTTPS URL. (not full result object)
+
+    5.     })
+        )
+    • Promise.all resolves → imagesUrl = ["url1", "url2", "url3"]
+*/
+
+/*
+    JSON.parse() & JSON.stringify()  =  Object ↔ String converters! 🔄
+    
+    Simple Analogy :    
+        JavaScript Object  ↔  JSON String (for APIs/Storage)
+
+    • JSON.stringify()  →  Object TO String.
+        const doctor = { name: "Dr. Rao", specialty: "Cardio" };
+        const jsonString = JSON.stringify(doctor);
+    
+        OUTPUT :
+        '{"name":"Dr. Rao","specialty":"Cardio"}'  ← TEXT !
+
+        Use when : Sending to API, Saving to localStorage, logging.
+
+    • JSON.parse()  →  String TO Object.
+        const jsonString = '{"name":"Dr. Rao","specialty":"Cardio"}';
+        const doctor = JSON.parse(jsonString);
+        
+        OUTPUT :
+        { name: "Dr. Rao", specialty: "Cardio" }   ← USABLE OBJECT ! 
+         
+        Use when : Receiving from API, Reading from localStorage.
+*/
+/*
+    const user = {
+      name: "Akash",
+      age: 25,
+      isAdmin: true
+    };
+
+    const jsonString = JSON.stringify(user);
+    console.log(jsonString);
+
+    Output :
+    {"name":"Akash","age":25,"isAdmin":true}
+
+    ✔ Object → String
 */
 
 /*
@@ -398,4 +510,25 @@ export const singleProduct = async (req, res) => {
     }
 
     This makes our API more Robust and Cleaner.
+*/
+
+/*
+    mongoose.Types = Mongoose's Utility Namespace for MongoDB Native Data Types !
+    • mongoose.Types contains MongoDB Data Type Classes that Mongoose provides as Helpers.
+
+    What's Inside :
+
+      mongoose.Types = {
+        ObjectId:    [ObjectId class],     // Most used!
+        Array:       [Mongoose Array subclass],
+        Buffer:      [Buffer subclass],
+        Decimal128:  [Decimal128 class],
+        Map:         [Map subclass],
+        SchemaType:  [Base class for schema types]
+      }
+
+    mongoose.Types.ObjectId.isValid("507f1f77bcf86cd79943911")
+    
+    • ObjectId = MongoDB's 12-Byte Unique ID Type.
+    • isValid() = Static Method that Validates ObjectId Strings.
 */
