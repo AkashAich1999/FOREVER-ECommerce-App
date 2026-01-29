@@ -4,13 +4,17 @@ import Title from "./Title";
 import ProductItem from "./ProductItem";
 
 const BestSeller = () => {
-  const { products } = useContext(ShopContext);
+  const { products, loading } = useContext(ShopContext);
   const [bestSeller, setBestSeller] = useState([]);
 
   useEffect(() => {
-    const bestProduct = products.filter((item) => (item.bestseller));
-    setBestSeller(bestProduct.slice(0, 5));
-  }, [products]);
+    if (!loading && products.length > 0) {
+      const bestProduct = products.filter((item) => item.bestSeller === true);
+      setBestSeller(bestProduct.slice(0, 5));
+    }
+  }, [products, loading]);
+
+  if (loading) return null; // or skeleton loader
 
   return (
     <div className="my-10">

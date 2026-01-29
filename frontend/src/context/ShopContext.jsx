@@ -1,5 +1,7 @@
 import { createContext, useEffect, useState } from "react";
-import { products } from "../assets/assets";
+// import { products } from "../assets/assets";
+
+import axios from "axios";
 import { toast } from "react-toastify";
 
 export const ShopContext = createContext();
@@ -7,9 +9,12 @@ export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
     const currency = '₹';
     const deliveryfee = 10;
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [search, setSearch] = useState('');
     const [showSearch, setShowSearch] = useState(false);
     const [cartItems, setCartItems] = useState({});
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const addToCart = async (itemId, size) => {
         if(!size) {
@@ -61,6 +66,8 @@ const ShopContextProvider = (props) => {
         for (const productId in cartItems) {
             const productInfo = products.find((product) => product._id === productId);
 
+            if (!productInfo) continue;
+
             for (const size in cartItems[productId]) {
                 const quantity = cartItems[productId][size];
                 totalAmount += productInfo.price * quantity;
@@ -70,13 +77,43 @@ const ShopContextProvider = (props) => {
         return totalAmount;
     }
 
+    useEffect(() => {
+        console.log("Products loaded:", products);
+    }, [products]);
+
+    const getProductsData = async () => {
+      try {
+        setLoading(true);
+
+        const response = await axios.get(`${backendUrl}/api/product/list`);
+
+        if (response.data.success) {
+            setProducts(response.data.products);
+        } else {
+            toast.error(response.data.message);
+        }
+
+      } catch (error) {
+        console.error(error);
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    useEffect(() => {
+        getProductsData();
+    }, []);
+
     const value = {
         products, currency, deliveryfee,
         search, setSearch, showSearch, setShowSearch,
         cartItems, addToCart,
         getCartCount,
         updateQuantity,
-        getCartAmount
+        getCartAmount,
+        backendUrl,
+        loading
     }
 
     return (

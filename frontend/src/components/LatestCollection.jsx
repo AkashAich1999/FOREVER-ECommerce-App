@@ -4,12 +4,16 @@ import Title from './Title';
 import ProductItem from './ProductItem';
 
 const LatestCollection = () => {
-  const { products } = useContext(ShopContext);
+  const { products, loading } = useContext(ShopContext);
   const [ latestProducts, setLatestProducts ] = useState([]);
 
   useEffect(() => {
-    setLatestProducts(products.slice(0, 10))
-  }, []);
+    if (!loading && products.length > 0) {
+      setLatestProducts(products.slice(0, 10));
+    }
+  }, [products, loading]);
+
+  if (loading) return null; // or skeleton loader
   
   // console.log(products);
 

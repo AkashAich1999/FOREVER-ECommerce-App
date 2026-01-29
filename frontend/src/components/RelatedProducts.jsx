@@ -4,11 +4,11 @@ import Title from "./Title";
 import ProductItem from "./ProductItem";
 
 const RelatedProducts = ({ category, subCategory }) => {
-  const { products } = useContext(ShopContext);
+  const { products, loading } = useContext(ShopContext);
   const [related, setRelated] = useState([]);
 
   useEffect(() => {
-    if (products.length) {
+    if (!loading && products.length > 0) {
         let productsCopy = products.slice();
 
         productsCopy = productsCopy.filter((item) => category === item.category);
@@ -17,7 +17,9 @@ const RelatedProducts = ({ category, subCategory }) => {
         // console.log(productsCopy.slice(0, 5));
         setRelated(productsCopy.slice(0, 5));
     }
-  }, [products, category, subCategory]);
+  }, [products, category, subCategory, loading]);
+
+  if (loading) return null; // or loader
 
   return (
     <div className="mt-24">
