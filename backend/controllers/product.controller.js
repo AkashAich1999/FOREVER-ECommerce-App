@@ -8,7 +8,7 @@ export const addProduct = async (req, res) => {
         const { name, description, price, category, subCategory, sizes, bestSeller } = req.body;
 
         // 1. Required Field Validation.
-        if (!name || !price || !category) {``
+        if (!name || !price || !category) {
             return res.status(400).json({ success: false, message: "Missing Required Fields" });
         }
 

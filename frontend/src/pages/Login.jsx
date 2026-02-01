@@ -14,13 +14,19 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   // Redirect if User is Already Logged In.
+  // useEffect(() => {
+  //   const localToken = localStorage.getItem("token");
+  //   if (token || localToken) {
+  //     setToken(token || localToken);  // Sync context with localStorage.
+  //     navigate("/");  // Redirect to home.
+  //   }
+  // }, [token, setToken, navigate]);
+
   useEffect(() => {
-    const localToken = localStorage.getItem("token");
-    if (token || localToken) {
-      setToken(token || localToken);  // Sync context with localStorage.
-      navigate("/");  // Redirect to home.
-    }
-  }, [token, setToken, navigate]);
+  if (token) {
+    navigate("/"); 
+  }
+}, [token]); // Runs whenever the token changes or the component loads
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();

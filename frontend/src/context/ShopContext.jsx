@@ -36,7 +36,29 @@ const ShopContextProvider = (props) => {
             cartData[itemId][size] = 1; 
         }
 
-        setCartItems(cartData);
+        if (token) {
+            try {
+                await axios.post(
+                    `${backendUrl}/api/cart/add`, 
+                    { itemId, size },
+                    { 
+                      headers: {
+                        Authorization: `Bearer ${token}` 
+                      }  
+                    } 
+                );
+
+                // Fetch Updated Cart From DB.
+                await getUserCart(token);
+
+            } catch (error) {
+                console.log(error);
+                toast.error(error.response?.data?.message || error.message);
+            }
+        } else {
+            // Guest User Logic.
+            setCartItems(cartData);
+        }
     } 
 
     useEffect(() => {
@@ -58,7 +80,29 @@ const ShopContextProvider = (props) => {
     const updateQuantity = async (itemId, size, quantity) => {
         let cartData = structuredClone(cartItems);  // Creates Deep Copy of Current Cart.
         cartData[itemId][size] = quantity;
-        setCartItems(cartData);
+
+        if (token) {
+            try {
+                await axios.post(
+                    `${backendUrl}/api/cart/update`,
+                    { itemId, size, quantity },
+                    { 
+                      headers: {
+                        Authorization: `Bearer ${token}` 
+                      }  
+                    } 
+                );
+
+                // Sync From DB.
+                await getUserCart(token);
+
+            } catch (error) {
+                console.log(error);
+                toast.error(error.message);
+            }
+        } else {
+            setCartItems(cartData);
+        }
     }
 
     const getCartAmount = () => {
@@ -67,7 +111,7 @@ const ShopContextProvider = (props) => {
         for (const productId in cartItems) {
             const productInfo = products.find((product) => product._id === productId);
 
-            if (!productInfo) continue;
+            if (!productInfo) continue; // Prevents Crash if Product Removed from DB.
 
             for (const size in cartItems[productId]) {
                 const quantity = cartItems[productId][size];
@@ -102,8 +146,38 @@ const ShopContextProvider = (props) => {
       }
     };
 
+    const getUserCart = async ( token ) => {
+        try {
+            const response = await axios.post(
+                `${backendUrl}/api/cart/get`, 
+                {},
+                { 
+                  headers: {
+                    Authorization: `Bearer ${token}` 
+                  }  
+                }
+            );
+
+            if (response.data.success) {
+                setCartItems(response.data.cartData);
+            }
+
+        } catch (error) {
+            console.error(error);
+            toast.error(error.message);
+        }
+    }
+
     useEffect(() => {
         getProductsData();
+    }, []);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+            setToken(storedToken);
+            getUserCart(storedToken);
+        }
     }, []);
 
     const value = {
@@ -193,4 +267,60 @@ export default ShopContextProvider;
     - Update state :
     setCartItems(cartData);
     Triggers UI Re-Render Everywhere.
+*/
+
+
+/*
+    
+    if (token) {
+        try {
+            await axios.post(
+            `${backendUrl}/api/cart/add`, 
+            { itemId, size },
+            { 
+                headers: {
+                Authorization: `Bearer ${token}` 
+                }  
+            } 
+            );
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response?.data?.message || error.message);
+        }
+    }
+
+    Main Purpose :
+
+    This block is used to :
+      Sync the Cart with the Backend Database ONLY if the User is Logged In.
+
+    Q. Why if (token) Check ?
+    => Supports two cart modes :
+
+       Mode 1 — Guest User. (Not Logged In)
+       No token exists.  ( token = "" )
+
+       So:  if (token) → false
+
+       Result:
+       Cart only updates in frontend state
+       setCartItems(cartData)
+
+       ✔ Works locally
+       ❌ Not saved in database
+
+       Mode 2 — Logged In User.
+
+       Token Exists :  ( token = "eyJhbGciOiJIUzI1NiIsInR5..." )
+
+       So:  if (token) → true
+
+       Result:
+
+       Send request to backend API
+       Save cart in DB
+
+
+       ✔ Persistent cart
+       ✔ User can login later and still see cart
 */
