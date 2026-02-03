@@ -57,7 +57,19 @@ export const getAllOrders = async (req, res) => {
 
 // User Order Data for Frontend.
 export const getUserOrders = async (req, res) => {
+    try {
+        const userId = req.userId;
 
+        const orders = await orderModel.find({ userId }).sort({ createdAt: -1 }).populate("items.productId");
+
+        // console.log(orders[0].items[0].productId);
+
+        res.status(200).json({ success: true, orders });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
 }
 
 // Update Order Status. (from Admin Panel)
