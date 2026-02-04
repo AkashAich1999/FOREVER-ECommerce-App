@@ -106,9 +106,26 @@ const PlaceOrder = () => {
           break;
         }
           
-        case 'stripe':
-          // We will add our Stripe API call logic here later
+        case 'stripe': {
+          const responseStripe = await axios.post(
+            `${backendUrl}/api/order/stripe`,
+            orderData,
+            { 
+              headers: {
+                Authorization: `Bearer ${token}` 
+              }  
+            }
+          )
+
+          if (responseStripe.data.success) {
+            const { session_url } = responseStripe.data;
+            window.location.replace(session_url);
+          } else {
+            toast.error(responseStripe.data.message);
+          }
+
           break;
+        }
 
         case 'razorpay':
           // We will add our Razorpay API call logic here later
