@@ -52,8 +52,14 @@ export const placeOrderRazorpay = async (req, res) => {
 
 // All Orders Data for Admin Panel.
 export const getAllOrders = async (req, res) => {
-
-}
+    try {
+      const orders = await orderModel.find({}).populate("items.productId");
+      res.status(200).json({ success: true, orders });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: error.message });
+    }
+};
 
 // User Order Data for Frontend.
 export const getUserOrders = async (req, res) => {
@@ -74,5 +80,31 @@ export const getUserOrders = async (req, res) => {
 
 // Update Order Status. (from Admin Panel)
 export const updateOrderStatus = async (req, res) => {
+    try {
+        const { orderId, status } = req.body;
 
+        if (!orderId || !status) {
+            return res.status(400).json({ success: false, message: "Order ID and Status are Required." });
+        }
+
+        const updatedOrder = await orderModel.findByIdAndUpdate(
+            orderId, 
+            { status },
+            { new: true } // returns Updated Document
+        );
+
+        if (!updatedOrder) {
+            return res.status(404).json({ success: false, message: "Order Not Found." });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Status Updated",
+            order: updatedOrder
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
 }
