@@ -26,6 +26,64 @@ const PlaceOrder = () => {
     phone: ''
   });
 
+  const initPay = (order) => {
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: order.currency,
+      name: "Order Payment",
+      description: "Order Payment",
+      order_id: order.id,
+      // receipt: order.receipt,
+      handler: async (response) => {
+        console.log(response)
+
+        try {
+          const verifyRes = await axios.post(
+            `${backendUrl}/api/order/verifyRazorpay`,
+            {
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+
+          if (verifyRes.data.success) {
+            setCartItems({});
+            navigate("/orders");
+            toast.success("Payment Successful");
+          } else {
+            toast.error("Payment Verification Failed");
+          }
+
+        } catch (error) {
+          toast.error(error.response?.data?.message || "Payment Verification Error");
+        }
+      }
+      ,
+
+      modal: {
+        ondismiss: async () => {
+          await axios.delete(
+            `${backendUrl}/api/order/cancel-razorpay`,
+            {
+              data: { orderId: order.receipt },
+              headers: { Authorization: `Bearer ${token}` }
+            }
+          );
+        }
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
   const onChangeHandler = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -127,10 +185,27 @@ const PlaceOrder = () => {
           break;
         }
 
-        case 'razorpay':
-          // We will add our Razorpay API call logic here later
-          break;
+        case 'razorpay': {
+          const responseRazorpay = await axios.post(
+            `${backendUrl}/api/order/razorpay`,
+            orderData,
+            { 
+              headers: {
+                Authorization: `Bearer ${token}` 
+              }  
+            }
+          );
 
+          if (responseRazorpay.data.success) {
+            // console.log(responseRazorpay.data.razorpayOrder);
+            initPay(responseRazorpay.data.razorpayOrder);
+          } else {
+            toast.error(responseRazorpay.data.message);
+          }
+
+          break;
+        }
+          
         default:
           break;
        }     
