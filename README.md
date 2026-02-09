@@ -1,3 +1,6 @@
+### Deployed Link :   
+https://forever-frontend-two-delta.vercel.app
+
 ### Role 1: User :  
 
 ### 1.1. Register & Login :  
@@ -46,13 +49,25 @@
 <img width="958" height="349" alt="25" src="https://github.com/user-attachments/assets/bb767f21-f86c-4c8a-9fe3-2c7219cc7679" />  
 <img width="959" height="469" alt="26" src="https://github.com/user-attachments/assets/5e366e49-d133-4d4e-a2b7-236cead69756" />  
 <img width="956" height="176" alt="27" src="https://github.com/user-attachments/assets/2ed45443-c080-4144-86e0-a7ba58674ad4" />  
-<img width="959" height="467" alt="28" src="https://github.com/user-attachments/assets/12ff3b08-5c1e-476c-bcfe-aad2b66944eb" />
+<img width="959" height="467" alt="28" src="https://github.com/user-attachments/assets/12ff3b08-5c1e-476c-bcfe-aad2b66944eb" />  
+
+### Orders Page :   
+<img width="959" height="467" alt="29" src="https://github.com/user-attachments/assets/055a6b01-c068-47a8-9ba1-4912e771d178" />  
+<img width="959" height="404" alt="30" src="https://github.com/user-attachments/assets/c86d76ef-40a6-4f42-a887-a07ac10c9360" />
 
 ### 1.9. Place Order (Razorpay) :  
-
+<img width="959" height="459" alt="31" src="https://github.com/user-attachments/assets/b4dcb0a9-1df5-48f1-b61a-08a38bc782e2" />  
+<img width="957" height="416" alt="32" src="https://github.com/user-attachments/assets/010e89b4-7e5a-4af1-bfaf-a6fd6b53ca8c" />  
+<img width="958" height="464" alt="33" src="https://github.com/user-attachments/assets/0e15e2dd-a586-47b2-bada-6aa5743bcee0" />  
+<img width="956" height="338" alt="34" src="https://github.com/user-attachments/assets/72743e0a-f13b-464c-be14-a7505adb6580" />
+<img width="959" height="470" alt="35" src="https://github.com/user-attachments/assets/b3df170a-8d27-4980-aa69-0adc7baf0dc0" />
+<img width="959" height="471" alt="36" src="https://github.com/user-attachments/assets/99aa6c3d-c483-404a-8c68-708d1e6ef989" />
+<img width="958" height="473" alt="37" src="https://github.com/user-attachments/assets/a86881f8-c6c6-4765-9f5e-4acd27cae5d9" />
 
 ### Orders Page :  
-  
+<img width="959" height="473" alt="38" src="https://github.com/user-attachments/assets/aa3fbe77-2645-4bbc-9297-d50eee26da4c" />
+<img width="958" height="308" alt="39" src="https://github.com/user-attachments/assets/3ac5f37c-0164-4b46-bce1-380f5472f802" />
+<img width="959" height="197" alt="40" src="https://github.com/user-attachments/assets/4b94f3a7-b306-4dfd-94f2-4cced00e6668" />
   
 ### Role 2: Admin :  
 ### 2.1. Admin Login :  
@@ -63,7 +78,8 @@
 <img width="959" height="154" alt="3" src="https://github.com/user-attachments/assets/328b5678-74f4-4067-a608-72e3048d0c4a" />
 
 ### 2.3. View and Manage Products :  
-<img width="959" height="428" alt="4" src="https://github.com/user-attachments/assets/9c2d8906-18db-43f4-b51d-988d3d5397dd" />
+<img width="959" height="431" alt="4" src="https://github.com/user-attachments/assets/17e4ec16-9ec9-4bb0-ab6d-9e846f1185da" />
 
 ### 2.4. View and Manage Orders :  
-<img width="959" height="471" alt="5" src="https://github.com/user-attachments/assets/41d5d1ce-d0a9-40f9-a2b4-bdef7e14d781" />
+<img width="959" height="442" alt="5" src="https://github.com/user-attachments/assets/68066e6e-ee13-461e-ba63-7ef42fd3b69d" />
+<img width="957" height="214" alt="6" src="https://github.com/user-attachments/assets/f3fc24e5-7f8e-4bdb-96e4-2556382283a6" />
