@@ -1,5 +1,7 @@
 ### Deployed Link :   
-https://forever-frontend-two-delta.vercel.app
+Frontend Deployment Link: https://forever-frontend-two-delta.vercel.app  
+Admin Deployment Link: https://forever-admin-fawn-pi.vercel.app  
+Backend Deployment Link: https://forever-backend-two-drab.vercel.app/  
 
 ### Role 1: User :  
 
